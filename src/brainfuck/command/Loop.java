@@ -5,7 +5,12 @@ import brainfuck.visitor.Visitor;
 import java.util.List;
 
 public class Loop implements Command {
+
     private final List<Command> commands;
+
+    public List<Command> getCommands() {
+        return commands;
+    }
 
     public Loop(List<Command> commands) {
         this.commands = commands;

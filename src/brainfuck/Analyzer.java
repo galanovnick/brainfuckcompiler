@@ -7,7 +7,7 @@ import java.util.*;
 public class Analyzer {
 
     public List<Command> analyze(String commands) {
-        Deque<List<Command>> commandsStack = new ArrayDeque<>();
+        final Deque<List<Command>> commandsStack = new ArrayDeque<>();
         commandsStack.push(new ArrayList<>());
         for (char symbol : commands.toCharArray()) {
             switch (symbol) {
