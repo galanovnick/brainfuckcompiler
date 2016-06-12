@@ -32,10 +32,15 @@ public class Analyzer {
                     commandsStack.push(new ArrayList<>());
                     break;
                 case ']':
-                    commandsStack.peek().add(new Loop(commandsStack.pop()));
+                    if (commandsStack.size() == 1)
+                        throw new IllegalStateException("[ expected");
+                    final List<Command> loopCommands = commandsStack.pop();
+                    commandsStack.peek().add(new Loop(loopCommands));
                     break;
             }
         }
+        if (commandsStack.size() > 1)
+            throw new IllegalStateException("] expected");
         return commandsStack.peek();
     }
 }
