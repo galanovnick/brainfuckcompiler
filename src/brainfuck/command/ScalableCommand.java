@@ -1,6 +1,6 @@
 package brainfuck.command;
 
-abstract public class BrainfuckCommand implements Command{
+abstract public class ScalableCommand implements Command{
     protected int capacity;
 
     @Override
@@ -8,7 +8,7 @@ abstract public class BrainfuckCommand implements Command{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        BrainfuckCommand that = (BrainfuckCommand) o;
+        ScalableCommand that = (ScalableCommand) o;
 
         return capacity == that.capacity;
 

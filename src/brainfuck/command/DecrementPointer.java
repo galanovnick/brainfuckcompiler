@@ -1,4 +1,11 @@
 package brainfuck.command;
 
-public class DecrementPointer extends BrainfuckCommand{
+import brainfuck.visitor.Visitor;
+
+public class DecrementPointer extends ScalableCommand{
+
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visit(this);
+    }
 }

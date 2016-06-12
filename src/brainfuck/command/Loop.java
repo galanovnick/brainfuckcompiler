@@ -1,8 +1,10 @@
 package brainfuck.command;
 
+import brainfuck.visitor.Visitor;
+
 import java.util.List;
 
-public class Loop extends BrainfuckCommand {
+public class Loop implements Command {
     private final List<Command> commands;
 
     public Loop(List<Command> commands) {
@@ -26,5 +28,10 @@ public class Loop extends BrainfuckCommand {
         int result = super.hashCode();
         result = 31 * result + (commands != null ? commands.hashCode() : 0);
         return result;
+    }
+
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visit(this);
     }
 }

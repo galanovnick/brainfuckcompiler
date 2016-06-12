@@ -1,4 +1,10 @@
 package brainfuck.command;
 
-public class IncrementValue extends BrainfuckCommand{
+import brainfuck.visitor.Visitor;
+
+public class IncrementValue extends ScalableCommand{
+    @Override
+    public void acceptVisitor(Visitor visitor) {
+        visitor.visit(this);
+    }
 }
