@@ -43,7 +43,7 @@ public class JavaAssembler implements Visitor {
 
         data.put("commands", commandsList);
 
-        Template template = cfg.getTemplate("src/brainfuck/JavaExecutorTemplate.ftl");
+        Template template = cfg.getTemplate("src/main/java/brainfuck/JavaExecutorTemplate.ftl");
 
         if (printStream != null) {
             Writer writer = new OutputStreamWriter(printStream);
@@ -51,7 +51,7 @@ public class JavaAssembler implements Visitor {
             writer.close();
         }
 
-        Writer fileWriter = new FileWriter(new File("src/brainfuck/BrainfuckJavaExecutor.java"));
+        Writer fileWriter = new FileWriter(new File("src/main/java/brainfuck/BrainfuckJavaExecutor.java"));
 
         template.process(data, fileWriter);
 
