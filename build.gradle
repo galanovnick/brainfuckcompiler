@@ -5,5 +5,6 @@ repositories {
 }
 
 dependencies {
+    compile group:'org.freemarker', name: 'freemarker', version: '2.3.14'
     testCompile 'junit:junit:4.12'
 }

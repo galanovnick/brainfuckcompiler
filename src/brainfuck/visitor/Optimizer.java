@@ -4,50 +4,79 @@ import brainfuck.command.*;
 
 import java.util.*;
 
-/**
- * Created by nick on 12.06.16.
- */
-public class Optimizer implements Visitor{
-    List<Command> optimizedCommands = new ArrayList<>();
+public class Optimizer implements Visitor {
 
-    public List<Command> optimizeCommands(List<Command> commands) {
-        if (commands == null || commands.size() == 0)
-            throw new IllegalArgumentException("Input commands list cannot be empty.");
-        commands.forEach(command -> command.acceptVisitor(this));
+    private List<Command> optimizedCommands = new ArrayList<>();
+
+    public List<Command> optimize(List<Command> commands) {
+
+        for (Command command : commands) {
+            command.acceptVisitor(this);
+        }
 
         return optimizedCommands;
     }
+
+    private void visitValueAwareCommand(ScalableCommand command) {
+        if (!optimizedCommands.isEmpty()) {
+
+            final Command lastCommand = optimizedCommands.get(
+                    optimizedCommands.size() - 1);
+
+            if (lastCommand.getClass().equals(command.getClass())) {
+
+                ScalableCommand valueAwareCommand =
+                        (ScalableCommand) lastCommand;
+
+                valueAwareCommand.setCapacity(
+                        valueAwareCommand.getCapacity() + 1);
+                return;
+            }
+        }
+
+        optimizedCommands.add(command);
+    }
+
     @Override
     public void visit(IncrementPointer command) {
-        optimizeScalableCommand(command);
+        visitValueAwareCommand(command);
     }
 
     @Override
     public void visit(DecrementPointer command) {
-        optimizeScalableCommand(command);
-    }
-
-    @Override
-    public void visit(IncrementValue command) {
-        optimizeScalableCommand(command);
-    }
-
-    @Override
-    public void visit(DecrementValue command) {
-        optimizeScalableCommand(command);
+        visitValueAwareCommand(command);
     }
 
     @Override
     public void visit(PrintValue command) {
-        optimizeScalableCommand(command);
+        visitValueAwareCommand(command);
+    }
+
+    @Override
+    public void visit(IncrementValue command) {
+        visitValueAwareCommand(command);
+    }
+
+    @Override
+    public void visit(DecrementValue command) {
+        optimizedCommands.add(command);
     }
 
     @Override
     public void visit(Loop command) {
+        optimizedCommands.add(command);
 
-    }
+        final List<Command> justToKeep = optimizedCommands;
 
-    private void optimizeScalableCommand(Command command) {
+        optimizedCommands = new ArrayList<>();
+
+        for (Command innerCommand: command.getCommands()) {
+            innerCommand.acceptVisitor(this);
+        }
+
+        command.setCommands(optimizedCommands);
+
+        optimizedCommands = justToKeep;
 
     }
 }

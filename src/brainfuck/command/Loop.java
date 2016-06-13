@@ -6,7 +6,11 @@ import java.util.List;
 
 public class Loop implements Command {
 
-    private final List<Command> commands;
+    public void setCommands(List<Command> commands) {
+        this.commands = commands;
+    }
+
+    private List<Command> commands;
 
     public List<Command> getCommands() {
         return commands;
