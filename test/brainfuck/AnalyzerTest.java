@@ -10,9 +10,6 @@ import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
-/**
- * Created by nick on 12.06.16.
- */
 public class AnalyzerTest {
 
     private Analyzer analyzer = new Analyzer();
