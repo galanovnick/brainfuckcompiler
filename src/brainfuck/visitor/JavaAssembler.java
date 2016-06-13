@@ -2,14 +2,27 @@ package brainfuck.visitor;
 
 import brainfuck.Analyzer;
 import brainfuck.command.*;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class JavaAssembler implements Visitor {
     List<String> translatedCommands = new ArrayList<>();
+
+    PrintStream printStream;
+
+    public JavaAssembler(PrintStream additionalPrintStream) {
+        printStream = additionalPrintStream;
+    }
+
+    public JavaAssembler() {
+    }
 
     public List<String> translate(String commands) {
 
@@ -19,21 +32,32 @@ public class JavaAssembler implements Visitor {
         commandsList.forEach(cmd -> cmd.acceptVisitor(this));
 
         return translatedCommands;
-        /*Configuration cfg = new Configuration();
+    }
+
+    public void createJavaClass(List<String> commandsList) throws IOException, TemplateException {
+        Configuration cfg = new Configuration();
 
         Map<String, Object> data = new HashMap<>();
 
         data.put("classname", "BrainfuckJavaExecutor");
 
-        data.put("commands", translatedCommands);
+        data.put("commands", commandsList);
 
         Template template = cfg.getTemplate("src/brainfuck/JavaExecutorTemplate.ftl");
+
+        if (printStream != null) {
+            Writer writer = new OutputStreamWriter(printStream);
+            template.process(data, writer);
+            writer.close();
+        }
 
         Writer fileWriter = new FileWriter(new File("src/brainfuck/BrainfuckJavaExecutor.java"));
 
         template.process(data, fileWriter);
-        fileWriter.close();*/
+
+        fileWriter.close();
     }
+
     @Override
     public void visit(IncrementPointer command) {
         translatedCommands.add("if (pointer < memory.length - " + command.getCapacity() + ")\n" +
