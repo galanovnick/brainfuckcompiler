@@ -5,6 +5,7 @@ import brainfuck.command.*;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import freemarker.template.Version;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class JavaAssembler implements Visitor {
     }
 
     public void createJavaClass(List<String> commandsList) throws IOException, TemplateException {
-        Configuration cfg = new Configuration();
+        Configuration cfg = new Configuration(Configuration.VERSION_2_3_23);
 
         Map<String, Object> data = new HashMap<>();
 
