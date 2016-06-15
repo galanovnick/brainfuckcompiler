@@ -1,10 +1,14 @@
 package brainfuck;
 
 import brainfuck.command.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 public class Analyzer {
+
+    final static Logger LOG = LoggerFactory.getLogger(Analyzer.class);
 
     public List<Command> analyze(String commands) {
         final Deque<List<Command>> commandsStack = new ArrayDeque<>();
@@ -32,14 +36,21 @@ public class Analyzer {
                     commandsStack.push(new ArrayList<>());
                     break;
                 case ']':
-                    if (commandsStack.size() == 1)
+                    if (commandsStack.size() == 1) {
+                        if (LOG.isErrorEnabled()) {
+                            LOG.error("Invalid syntax found [\"] expected\"].");
+                        }
                         throw new IllegalStateException("[ expected");
+                    }
                     final List<Command> loopCommands = commandsStack.pop();
                     commandsStack.peek().add(new Loop(loopCommands));
                     break;
             }
         }
         if (commandsStack.size() > 1) {
+            if (LOG.isErrorEnabled()) {
+                LOG.error("Invalid syntax found [\"] expected\"].");
+            }
             throw new IllegalStateException("] expected");
         }
         return commandsStack.peek();

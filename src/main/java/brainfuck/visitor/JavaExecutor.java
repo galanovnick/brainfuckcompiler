@@ -2,11 +2,15 @@ package brainfuck.visitor;
 
 import brainfuck.Analyzer;
 import brainfuck.command.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.PrintStream;
 import java.util.List;
 
-public class JavaExecutor implements Visitor{
+public class JavaExecutor implements Visitor {
+    static final Logger LOG = LoggerFactory.getLogger(JavaExecutor.class);
+
     byte[] memory = new byte[1000];
     int pointer = 0;
 
@@ -17,6 +21,10 @@ public class JavaExecutor implements Visitor{
     final PrintStream printStream;
 
     public void execute(String commands) {
+        if (LOG.isInfoEnabled()) {
+            LOG.info("Executing commands:\""
+                    + ((commands.length() > 20) ? commands.substring(0, 20) : commands) + "\".");
+        }
         memory = new byte[1000];
         pointer = 0;
         List<Command> commandsList =

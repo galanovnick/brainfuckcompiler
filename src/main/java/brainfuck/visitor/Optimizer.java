@@ -1,6 +1,9 @@
 package brainfuck.visitor;
 
 import brainfuck.command.*;
+import groovyx.gpars.extra166y.Ops;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -9,7 +12,6 @@ public class Optimizer implements Visitor {
     private List<Command> optimizedCommands = new ArrayList<>();
 
     public List<Command> optimize(List<Command> commands) {
-
         for (Command command : commands) {
             command.acceptVisitor(this);
         }
