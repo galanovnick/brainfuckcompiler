@@ -2,10 +2,7 @@ package brainfuck;
 
 import brainfuck.visitor.JavaAssembler;
 import freemarker.template.TemplateException;
-import org.apache.commons.io.Charsets;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.comparator.CompositeFileComparator;
-import org.apache.commons.io.comparator.SizeFileComparator;
 import org.junit.Test;
 
 import java.io.*;
