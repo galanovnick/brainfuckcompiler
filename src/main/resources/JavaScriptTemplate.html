@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brainfuck -> JavaScript translator</title>
+</head>
+<script>
+    function execute() {
+        var memory = new Array();
+        var pointer = 0;
+        <#list commands as command>
+            ${command}
+        </#list>
+    }
+    document.addEventListener("DOMContentLoaded", execute);
+</script>
+<body>
+    <div id="out">
+
+    </div>
+</body>
+</html>
