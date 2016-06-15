@@ -1,8 +1,7 @@
 package brainfuck;
 
-import brainfuck.visitor.GroovyAssembler;
+import brainfuck.visitor.JavaScriptAssembler;
 import freemarker.template.TemplateException;
-import groovy.lang.GroovyShell;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 
@@ -17,48 +16,48 @@ import java.util.List;
 import static junit.framework.TestCase.assertEquals;
 import static junit.framework.TestCase.assertNotNull;
 
-public class GroovyAssemblerTest {
+public class JavaScriptAssemblerTest {
 
     final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     final PrintStream printStream = new PrintStream(outContent);
 
-    final GroovyAssembler groovyAssembler = new GroovyAssembler();
+    final JavaScriptAssembler javaScriptAssembler= new JavaScriptAssembler();
 
 
-    final File groovyTemplateFile = new File("src/main/resources/GroovyTemplate.groovy");
+    final File jsTemplateFile = new File("src/main/resources/JavaScriptTemplate.html");
 
     @Test
     public void testIncrementPointerCommandTranslation() {
-        List<String> expected = Collections.singletonList("if (pointer < memory.length - 1) pointer+=1");
+        List<String> expected = Collections.singletonList("if (pointer < memory.length - 1) pointer+=1;");
 
-        List<String> actual = groovyAssembler.translate(">");
+        List<String> actual = javaScriptAssembler.translate(">");
 
         compareLists(expected, actual);
     }
 
     @Test
     public void testDecrementPointerCommandTranslation() {
-        List<String> expected = Collections.singletonList("if (pointer > 0) pointer-=1");
+        List<String> expected = Collections.singletonList("if (pointer > 0) pointer-=1;");
 
-        List<String> actual = groovyAssembler.translate("<");
+        List<String> actual = javaScriptAssembler.translate("<");
 
         compareLists(expected, actual);
     }
 
     @Test
     public void testIncrementValueCommandTranslation() {
-        List<String> expected = Collections.singletonList("memory[pointer]+=1");
+        List<String> expected = Collections.singletonList("memory[pointer]+=1;");
 
-        List<String> actual = groovyAssembler.translate("+");
+        List<String> actual = javaScriptAssembler.translate("+");
 
         compareLists(expected, actual);
     }
 
     @Test
     public void testDecrementValueCommandTranslation() {
-        List<String> expected = Collections.singletonList("memory[pointer]-=1");
+        List<String> expected = Collections.singletonList("memory[pointer]-=1;");
 
-        List<String> actual = groovyAssembler.translate("-");
+        List<String> actual = javaScriptAssembler.translate("-");
 
         compareLists(expected, actual);
     }
@@ -66,9 +65,10 @@ public class GroovyAssemblerTest {
     @Test
     public void testPrintCommandTranslation() {
         List<String> expected = Collections.singletonList(
-                "1.times { print ((char) memory[pointer]) }");
+                "for (var i = 0; i < 1; i++)" +
+                        " document.getElementById(\"out\").innerText += String.fromCharCode(memory[pointer]);");
 
-        List<String> actual = groovyAssembler.translate(".");
+        List<String> actual = javaScriptAssembler.translate(".");
 
         compareLists(expected, actual);
     }
@@ -79,7 +79,7 @@ public class GroovyAssemblerTest {
                 System.getProperty("line.separator"),
                 "}" + System.getProperty("line.separator"));
 
-        List<String> actual = groovyAssembler.translate("[]");
+        List<String> actual = javaScriptAssembler.translate("[]");
 
         compareLists(expected, actual);
     }
@@ -87,43 +87,36 @@ public class GroovyAssemblerTest {
     @Test
     public void testJavaSimpleProgrammCreation() throws IOException, TemplateException {
 
-        String resultFilePath = "src/main/groovy/brainfuck/results/";
+        String resultFilePath = "src/main/javascript/brainfuck/results/";
         String resultFileName = "BrainfuckSimpleProgrammExample";
-        CodeGenerator.generateCode(groovyTemplateFile, resultFilePath,
-                resultFileName, groovyAssembler.translate(">+<<-"), null);
+        CodeGenerator.generateCode(jsTemplateFile, resultFilePath,
+                resultFileName, javaScriptAssembler.translate(">+<<-"), printStream);
 
-        compareFiles(new File("src/main/resources/benchmarkfiles/GroovyProgrammBenchmark.groovy"),
-                new File(resultFilePath + resultFileName + ".groovy"));
+        compareFiles(new File("src/main/resources/benchmarkfiles/JavaScriptProgrammBenchmark.html"),
+                new File(resultFilePath + resultFileName + ".html"));
 
     }
 
     @Test
     public void testLoopProgramCreation() throws IOException, TemplateException {
 
-        String resultFilePath = "src/main/groovy/brainfuck/results/";
+        String resultFilePath = "src/main/javascript/brainfuck/results/";
         String resultFileName = "BrainfuckLoopExample";
-        CodeGenerator.generateCode(groovyTemplateFile, resultFilePath,
-                resultFileName, groovyAssembler.translate("++[>+<-]"), null);
+        CodeGenerator.generateCode(jsTemplateFile, resultFilePath,
+                resultFileName, javaScriptAssembler.translate("++[>+<-]"), printStream);
 
-        compareFiles(new File("src/main/resources/benchmarkfiles/GroovyLoopBenchmark.groovy"),
-                new File(resultFilePath + resultFileName + ".groovy"));
+        compareFiles(new File("src/main/resources/benchmarkfiles/JavaScriptLoopBenchmark.html"),
+                new File(resultFilePath + resultFileName + ".html"));
     }
 
     @Test
     public void testHelloWorldAssemble() throws IOException, TemplateException {
-        String resultFilePath = "src/main/groovy/brainfuck/results/";
+        String resultFilePath = "src/main/javascript/brainfuck/results/";
         String resultFileName = "BrainfuckHelloWorld";
-        CodeGenerator.generateCode(groovyTemplateFile, resultFilePath,
-                resultFileName, groovyAssembler.translate("++++++++[>++++[>++>" +
+        CodeGenerator.generateCode(jsTemplateFile, resultFilePath,
+                resultFileName, javaScriptAssembler.translate("++++++++[>++++[>++>" +
                         "+++>+++>+<<<<-]>+>+>->>+[<]<-]>>.>---.+++++++..+++.>>.<-." +
                         "<.+++.------.--------.>>+.>++."), null);
-        System.setOut(printStream);
-        new GroovyShell().evaluate(new File(
-                "src/main/groovy/brainfuck/results/BrainfuckHelloWorld.groovy"));
-        System.setOut(null);
-        printStream.flush();
-        assertEquals("Translation of 'HelloWorld' program failed.",
-                "Hello World!" + System.getProperty("line.separator"), outContent.toString());
     }
 
     private void compareLists(List<String> expected, List<String> actual) {

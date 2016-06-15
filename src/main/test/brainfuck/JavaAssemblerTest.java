@@ -72,7 +72,9 @@ public class JavaAssemblerTest {
 
     @Test
     public void testLoopCommandTranslation() {
-        List<String> expected = Arrays.asList("while (memory[pointer] != 0) {\n","}\n");
+        List<String> expected = Arrays.asList("while (memory[pointer] != 0) {" +
+                System.getProperty("line.separator"),
+                "}" + System.getProperty("line.separator"));
 
         List<String> actual = javaAssembler.translate("[]");
 

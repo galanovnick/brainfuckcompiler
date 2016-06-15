@@ -39,8 +39,9 @@ public class Analyzer {
                     break;
             }
         }
-        if (commandsStack.size() > 1)
+        if (commandsStack.size() > 1) {
             throw new IllegalStateException("] expected");
+        }
         return commandsStack.peek();
     }
 }

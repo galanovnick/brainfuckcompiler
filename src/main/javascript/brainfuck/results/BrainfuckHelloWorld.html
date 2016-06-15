@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Brainfuck -> JavaScript translator</title>
+</head>
+<script>
+    function execute() {
+        var memory = new Array();
+        for (var i = 0; i < 1000; i ++) {
+            memory[i] = 0;
+        }
+        var pointer = 0;
+                memory[pointer]+=8;
+        while (memory[pointer] != 0) {
+
+            if (pointer < memory.length - 1) pointer+=1;
+            memory[pointer]+=4;
+            while (memory[pointer] != 0) {
+
+                if (pointer < memory.length - 1) pointer+=1;
+                memory[pointer]+=2;
+                if (pointer < memory.length - 1) pointer+=1;
+                memory[pointer]+=3;
+                if (pointer < memory.length - 1) pointer+=1;
+                memory[pointer]+=3;
+                if (pointer < memory.length - 1) pointer+=1;
+                memory[pointer]+=1;
+                if (pointer > 3) pointer-=4;
+                memory[pointer]-=1;
+            }
+
+            if (pointer < memory.length - 1) pointer+=1;
+            memory[pointer]+=1;
+            if (pointer < memory.length - 1) pointer+=1;
+            memory[pointer]+=1;
+            if (pointer < memory.length - 1) pointer+=1;
+            memory[pointer]-=1;
+            if (pointer < memory.length - 2) pointer+=2;
+            memory[pointer]+=1;
+            while (memory[pointer] != 0) {
+
+                if (pointer > 0) pointer-=1;
+            }
+
+            if (pointer > 0) pointer-=1;
+            memory[pointer]-=1;
+        }
+
+        if (pointer < memory.length - 2) pointer+=2;
+        for (var i = 0; i < 1; i++) document.getElementById("out").innerText += String.fromCharCode(memory[pointer]);
+        if (pointer < memory.length - 1) pointer+=1;
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        for (var i = 0; i < 1; i++) document.getElementById("out").innerText += String.fromCharCode(memory[pointer]);
+        memory[pointer]+=7;
+        for (var i = 0; i < 2; i++) document.getElementById("out").innerText += String.fromCharCode(memory[pointer]);
+        memory[pointer]+=3;
+        for (var i = 0; i < 1; i++) document.getElementById("out").innerText += String.fromCharCode(memory[pointer]);
+        if (pointer < memory.length - 2) pointer+=2;
+        for (var i = 0; i < 1; i++) document.getElementById("out").innerText += String.fromCharCode(memory[pointer]);
+        if (pointer > 0) pointer-=1;
+        memory[pointer]-=1;
+        for (var i = 0; i < 1; i++) document.getElementById("out").innerText += String.fromCharCode(memory[pointer]);
+        if (pointer > 0) pointer-=1;
+        for (var i = 0; i < 1; i++) document.getElementById("out").innerText += String.fromCharCode(memory[pointer]);
+        memory[pointer]+=3;
+        for (var i = 0; i < 1; i++) document.getElementById("out").innerText += String.fromCharCode(memory[pointer]);
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        for (var i = 0; i < 1; i++) document.getElementById("out").innerText += String.fromCharCode(memory[pointer]);
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        memory[pointer]-=1;
+        for (var i = 0; i < 1; i++) document.getElementById("out").innerText += String.fromCharCode(memory[pointer]);
+        if (pointer < memory.length - 2) pointer+=2;
+        memory[pointer]+=1;
+        for (var i = 0; i < 1; i++) document.getElementById("out").innerText += String.fromCharCode(memory[pointer]);
+        if (pointer < memory.length - 1) pointer+=1;
+        memory[pointer]+=2;
+        for (var i = 0; i < 1; i++) document.getElementById("out").innerText += String.fromCharCode(memory[pointer]);
+    }
+    document.addEventListener("DOMContentLoaded", execute);
+</script>
+<body>
+    <div id="out">
+
+    </div>
+</body>
+</html>

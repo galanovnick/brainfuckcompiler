@@ -11,9 +11,10 @@
             memory[i] = 0;
         }
         var pointer = 0;
-        <#list commands as command>
-        ${command}
-        </#list>
+                if (pointer < memory.length - 1) pointer+=1;
+        memory[pointer]+=1;
+        if (pointer > 1) pointer-=2;
+        memory[pointer]-=1;
     }
     document.addEventListener("DOMContentLoaded", execute);
 </script>

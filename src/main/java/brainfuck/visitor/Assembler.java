@@ -8,7 +8,8 @@ import java.util.List;
 
 public abstract class Assembler implements Visitor{
 
-    List<String> translatedCommands = new ArrayList<>();
+    protected List<String> translatedCommands = new ArrayList<>();
+    protected StringBuilder shift = new StringBuilder("");
 
     public List<String> translate(String commands) {
 
